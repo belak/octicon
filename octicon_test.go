@@ -1,34 +1,21 @@
 package octicon_test
 
 import (
-	"io"
-	"log"
-	"os"
+	"testing"
 
-	"github.com/shurcooL/octicon"
-	"golang.org/x/net/html"
+	"github.com/belak/octicon"
+	"github.com/stretchr/testify/assert"
 )
 
-func Example() {
-	var w io.Writer = os.Stdout // Or, e.g., http.ResponseWriter in your HTTP handler, etc.
+var alert16Icon = `<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewbox="0 0 16 16"><path fill-rule="evenodd" d="M8.22 1.754a.25.25 0 00-.44 0L1.698 13.132a.25.25 0 00.22.368h12.164a.25.25 0 00.22-.368L8.22 1.754zm-1.763-.707c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0114.082 15H1.918a1.75 1.75 0 01-1.543-2.575L6.457 1.047zM9 11a1 1 0 11-2 0 1 1 0 012 0zm-.25-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path></svg>`
+var markGithub24Icon = `<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewbox="0 0 24 24"><path fill-rule="evenodd" d="M22 1.75a.75.75 0 00-1.161-.627c-.047.03-.094.057-.142.085a9.15 9.15 0 01-.49.262c-.441.22-1.11.519-2.002.82-1.78.6-4.45 1.21-7.955 1.21H6.5A5.5 5.5 0 005 14.293v.457c0 3.061.684 5.505 1.061 6.621.24.709.904 1.129 1.6 1.129h2.013c1.294 0 2.1-1.322 1.732-2.453-.412-1.268-.906-3.268-.906-5.547 0-.03-.002-.06-.005-.088 3.382.028 5.965.644 7.703 1.251.89.312 1.559.62 2 .849.084.043.171.096.261.15.357.214.757.455 1.142.25A.75.75 0 0022 16.25V1.75zM10.5 12.912c3.564.029 6.313.678 8.193 1.335.737.258 1.34.517 1.807.74V2.993c-.467.216-1.073.467-1.815.718-1.878.634-4.624 1.26-8.185 1.288v7.913zm-4 1.838v-.25H9c0 2.486.537 4.648.98 6.01a.398.398 0 01-.057.343c-.07.104-.162.147-.249.147H7.661c-.105 0-.161-.058-.179-.109-.344-1.018-.982-3.294-.982-6.141zM6.5 5H9v8H6.5a4 4 0 010-8z"></path></svg>`
 
-	err := html.Render(w, octicon.Alert())
-	if err != nil {
-		log.Fatalln(err)
-	}
+func TestBasic(t *testing.T) {
+	data, ok := octicon.Alert(16)
+	assert.True(t, ok)
+	assert.Equal(t, alert16Icon, data)
 
-	// Output:
-	// <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="fill: currentColor; vertical-align: top;"><path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg>
-}
-
-func ExampleSetSize() {
-	var w io.Writer = os.Stdout // Or, e.g., http.ResponseWriter in your HTTP handler, etc.
-
-	err := html.Render(w, octicon.SetSize(octicon.MarkGitHub(), 24))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	// Output:
-	// <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" style="fill: currentColor; vertical-align: top;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+	data, ok = octicon.Megaphone(24)
+	assert.True(t, ok)
+	assert.Equal(t, markGithub24Icon, data)
 }
