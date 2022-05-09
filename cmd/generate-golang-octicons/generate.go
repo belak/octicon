@@ -69,6 +69,7 @@ func run() error {
 
 import (
 	"fmt"
+	"html/template"
 )
 
 // Icon returns a string representing the named Octicon.
@@ -83,13 +84,13 @@ func Icon(name string, height int) (string, bool) {
 	}
 }
 
-func IconTemplateFunc(name string, height int) (string, error) {
+func IconTemplateFunc(name string, height int) (template.HTML, error) {
 	i, ok := Icon(name, height)
 	if !ok {
 		return "", fmt.Errorf("unknown icon (%%s) or height (%%d)", name, height)
 	}
 
-	return i, nil
+	return template.HTML(i), nil
 }
 `)
 
