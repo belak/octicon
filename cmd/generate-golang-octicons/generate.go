@@ -126,7 +126,7 @@ func generateAndWriteOcticon(w io.Writer, icon octicon) {
 	for _, height := range heights {
 		heightInfo := icon.Heights[height]
 		fmt.Fprintf(w, "		case %s:\n", height)
-		fmt.Fprintf(w, "			return %q, true\n", fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" height="%s" width="%d" viewbox="0 0 %s %d">%s</svg>`, height, heightInfo.Width, height, heightInfo.Width, heightInfo.Path))
+		fmt.Fprintf(w, "			return %q, true\n", fmt.Sprintf(`<svg class="octicon octicon-%s" height="%s" width="%d" viewbox="0 0 %s %d" aria-hidden="true">%s</svg>`, icon.Name, height, heightInfo.Width, height, heightInfo.Width, heightInfo.Path))
 	}
 
 	fmt.Fprintf(w, "		default:\n")
