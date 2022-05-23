@@ -70,22 +70,23 @@ func run() error {
 import (
 	"fmt"
 	"html/template"
+	"strings"
 )
 
 // Icon returns a string representing the named Octicon.
-func Icon(name string, height int) (string, bool) {
+func Icon(name string, height int, extraClasses ...string) (string, bool) {
 	switch name {
 `)
 	for _, name := range names {
-		fmt.Fprintf(&buf, "	case %q:\n		return %v(height)\n", name, kebabToCamelCase(name))
+		fmt.Fprintf(&buf, "	case %q:\n		return %v(height, extraClasses...)\n", name, kebabToCamelCase(name))
 	}
 	fmt.Fprintf(&buf, `	default:
 		return "", false
 	}
 }
 
-func IconTemplateFunc(name string, height int) (template.HTML, error) {
-	i, ok := Icon(name, height)
+func IconTemplateFunc(name string, height int, extraClasses ...string) (template.HTML, error) {
+	i, ok := Icon(name, height, extraClasses...)
 	if !ok {
 		return "", fmt.Errorf("unknown icon (%%s) or height (%%d)", name, height)
 	}
@@ -114,7 +115,11 @@ type octicon struct {
 func generateAndWriteOcticon(w io.Writer, icon octicon) {
 	fmt.Fprintln(w)
 	fmt.Fprintf(w, "// %s returns a string representing an %q Octicon.\n", kebabToCamelCase(icon.Name), icon.Name)
-	fmt.Fprintf(w, "func %s(height int) (string, bool) {\n", kebabToCamelCase(icon.Name))
+	fmt.Fprintf(w, "func %s(height int, rawExtraClasses ...string) (string, bool) {\n", kebabToCamelCase(icon.Name))
+	fmt.Fprintf(w, "	extraClasses := strings.Join(rawExtraClasses, \" \")\n")
+	fmt.Fprintf(w, "	if extraClasses != \"\" {\n")
+	fmt.Fprintf(w, "		extraClasses = \" \" + extraClasses\n")
+	fmt.Fprintf(w, "	}\n")
 	fmt.Fprintf(w, "	switch height {\n")
 
 	var heights []string
@@ -126,7 +131,7 @@ func generateAndWriteOcticon(w io.Writer, icon octicon) {
 	for _, height := range heights {
 		heightInfo := icon.Heights[height]
 		fmt.Fprintf(w, "		case %s:\n", height)
-		fmt.Fprintf(w, "			return %q, true\n", fmt.Sprintf(`<svg class="octicon octicon-%s" height="%s" width="%d" viewbox="0 0 %s %d" aria-hidden="true">%s</svg>`, icon.Name, height, heightInfo.Width, height, heightInfo.Width, heightInfo.Path))
+		fmt.Fprintf(w, "			return fmt.Sprintf(%q, extraClasses), true\n", fmt.Sprintf(`<svg class="octicon octicon-%s%%s" height="%s" width="%d" viewbox="0 0 %s %d" aria-hidden="true">%s</svg>`, icon.Name, height, heightInfo.Width, height, heightInfo.Width, heightInfo.Path))
 	}
 
 	fmt.Fprintf(w, "		default:\n")
