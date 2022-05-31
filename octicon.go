@@ -195,6 +195,8 @@ func Icon(name string, height int, extraClasses ...string) (string, bool) {
 		return FeedTrophy(height, extraClasses...)
 	case "file":
 		return File(height, extraClasses...)
+	case "file-added":
+		return FileAdded(height, extraClasses...)
 	case "file-badge":
 		return FileBadge(height, extraClasses...)
 	case "file-binary":
@@ -211,6 +213,10 @@ func Icon(name string, height int, extraClasses ...string) (string, bool) {
 		return FileDirectoryOpenFill(height, extraClasses...)
 	case "file-media":
 		return FileMedia(height, extraClasses...)
+	case "file-moved":
+		return FileMoved(height, extraClasses...)
+	case "file-removed":
+		return FileRemoved(height, extraClasses...)
 	case "file-submodule":
 		return FileSubmodule(height, extraClasses...)
 	case "file-symlink-file":
@@ -1995,9 +2001,23 @@ func File(height int, rawExtraClasses ...string) (string, bool) {
 	}
 	switch height {
 	case 16:
-		return fmt.Sprintf("<svg class=\"octicon octicon-file%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M3.75 1.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6H9.75A1.75 1.75 0 018 4.25V1.5H3.75zm5.75.56v2.19c0 .138.112.25.25.25h2.19L9.5 2.06zM2 1.75C2 .784 2.784 0 3.75 0h5.086c.464 0 .909.184 1.237.513l3.414 3.414c.329.328.513.773.513 1.237v8.086A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25V1.75z\"></path></svg>", extraClasses), true
+		return fmt.Sprintf("<svg class=\"octicon octicon-file%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 00.25-.25V6h-2.75A1.75 1.75 0 019 4.25V1.5H3.75zm6.75.062V4.25c0 .138.112.25.25.25h2.688a.252.252 0 00-.011-.013l-2.914-2.914a.272.272 0 00-.013-.011zM2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-9.5A1.75 1.75 0 012 14.25V1.75z\"></path></svg>", extraClasses), true
 	case 24:
 		return fmt.Sprintf("<svg class=\"octicon octicon-file%s\" height=\"24\" width=\"24\" viewbox=\"0 0 24 24\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M5 2.5a.5.5 0 00-.5.5v18a.5.5 0 00.5.5h14a.5.5 0 00.5-.5V8.5h-4a2 2 0 01-2-2v-4H5zm10 0v4a.5.5 0 00.5.5h4a.5.5 0 00-.146-.336l-4.018-4.018A.5.5 0 0015 2.5zM3 3a2 2 0 012-2h9.982a2 2 0 011.414.586l4.018 4.018A2 2 0 0121 7.018V21a2 2 0 01-2 2H5a2 2 0 01-2-2V3z\"></path></svg>", extraClasses), true
+	default:
+		return "", false
+	}
+}
+
+// FileAdded returns a string representing an "file-added" Octicon.
+func FileAdded(height int, rawExtraClasses ...string) (string, bool) {
+	extraClasses := strings.Join(rawExtraClasses, " ")
+	if extraClasses != "" {
+		extraClasses = " " + extraClasses
+	}
+	switch height {
+	case 16:
+		return fmt.Sprintf("<svg class=\"octicon octicon-file-added%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 00.25-.25V4.664a.25.25 0 00-.073-.177l-2.914-2.914a.25.25 0 00-.177-.073H3.75zM2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-9.5A1.75 1.75 0 012 14.25V1.75zm6.23 3.508a.75.75 0 01.755.745l.01 1.497h1.497a.75.75 0 010 1.5H9v1.507a.75.75 0 01-1.5 0V9.005l-1.502.01a.75.75 0 11-.01-1.5l1.507-.01-.01-1.492a.75.75 0 01.745-.755z\"></path></svg>", extraClasses), true
 	default:
 		return "", false
 	}
@@ -2120,6 +2140,34 @@ func FileMedia(height int, rawExtraClasses ...string) (string, bool) {
 	switch height {
 	case 24:
 		return fmt.Sprintf("<svg class=\"octicon octicon-file-media%s\" height=\"24\" width=\"24\" viewbox=\"0 0 24 24\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2.25 4a.25.25 0 00-.25.25v15.5c0 .138.112.25.25.25h3.178L14 10.977a1.75 1.75 0 012.506-.032L22 16.44V4.25a.25.25 0 00-.25-.25H2.25zm3.496 17.5H21.75a1.75 1.75 0 001.75-1.75V4.25a1.75 1.75 0 00-1.75-1.75H2.25A1.75 1.75 0 00.5 4.25v15.5c0 .966.784 1.75 1.75 1.75h3.496zM22 19.75v-1.19l-6.555-6.554a.25.25 0 00-.358.004L7.497 20H21.75a.25.25 0 00.25-.25zM9 9.25a1.75 1.75 0 11-3.5 0 1.75 1.75 0 013.5 0zm1.5 0a3.25 3.25 0 11-6.5 0 3.25 3.25 0 016.5 0z\"></path></svg>", extraClasses), true
+	default:
+		return "", false
+	}
+}
+
+// FileMoved returns a string representing an "file-moved" Octicon.
+func FileMoved(height int, rawExtraClasses ...string) (string, bool) {
+	extraClasses := strings.Join(rawExtraClasses, " ")
+	if extraClasses != "" {
+		extraClasses = " " + extraClasses
+	}
+	switch height {
+	case 16:
+		return fmt.Sprintf("<svg class=\"octicon octicon-file-moved%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-3.5a.75.75 0 010-1.5h3.5a.25.25 0 00.25-.25V4.664a.25.25 0 00-.073-.177l-2.914-2.914a.25.25 0 00-.177-.073H3.75a.25.25 0 00-.25.25v6.5a.75.75 0 01-1.5 0v-6.5z\"></path><path d=\"M5.427 15.573l3.146-3.146a.25.25 0 000-.354L5.427 8.927A.25.25 0 005 9.104V11.5H.75a.75.75 0 000 1.5H5v2.396c0 .223.27.335.427.177z\"></path></svg>", extraClasses), true
+	default:
+		return "", false
+	}
+}
+
+// FileRemoved returns a string representing an "file-removed" Octicon.
+func FileRemoved(height int, rawExtraClasses ...string) (string, bool) {
+	extraClasses := strings.Join(rawExtraClasses, " ")
+	if extraClasses != "" {
+		extraClasses = " " + extraClasses
+	}
+	switch height {
+	case 16:
+		return fmt.Sprintf("<svg class=\"octicon octicon-file-removed%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 00.25-.25V4.664a.25.25 0 00-.073-.177l-2.914-2.914a.25.25 0 00-.177-.073H3.75zM2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-9.5A1.75 1.75 0 012 14.25V1.75zM8.25 7.5h2.242a.75.75 0 010 1.5h-2.24l-2.254.015a.75.75 0 01-.01-1.5L8.25 7.5z\"></path></svg>", extraClasses), true
 	default:
 		return "", false
 	}
@@ -3267,7 +3315,7 @@ func Organization(height int, rawExtraClasses ...string) (string, bool) {
 	case 16:
 		return fmt.Sprintf("<svg class=\"octicon octicon-organization%s\" height=\"16\" width=\"16\" viewbox=\"0 0 16 16\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M1.5 14.25c0 .138.112.25.25.25H4v-1.25a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v1.25h2.25a.25.25 0 00.25-.25V1.75a.25.25 0 00-.25-.25h-8.5a.25.25 0 00-.25.25v12.5zM1.75 16A1.75 1.75 0 010 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 00.25-.25V8.285a.25.25 0 00-.111-.208l-1.055-.703a.75.75 0 11.832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0114.25 16h-3.5a.75.75 0 01-.197-.026c-.099.017-.2.026-.303.026h-3a.75.75 0 01-.75-.75V14h-1v1.25a.75.75 0 01-.75.75h-3zM3 3.75A.75.75 0 013.75 3h.5a.75.75 0 010 1.5h-.5A.75.75 0 013 3.75zM3.75 6a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM3 9.75A.75.75 0 013.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 013 9.75zM7.75 9a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM7 6.75A.75.75 0 017.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 017 6.75zM7.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5z\"></path></svg>", extraClasses), true
 	case 24:
-		return fmt.Sprintf("<svg class=\"octicon octicon-organization%s\" height=\"24\" width=\"24\" viewbox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7.25 12a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6.5 9.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zM7.25 5a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM10 12.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zm.75-4.25a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM10 5.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zM14.25 12a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zm-.75-2.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zM14.25 5a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5z\"></path><path fill-rule=\"evenodd\" d=\"M3 20a2 2 0 002 2h3.75a.75.75 0 00.75-.75V19h3v2.25c0 .414.336.75.75.75H17c.092 0 .183-.006.272-.018a.758.758 0 00.166.018H21.5a2 2 0 002-2v-7.625a2 2 0 00-.8-1.6l-1-.75a.75.75 0 10-.9 1.2l1 .75a.5.5 0 01.2.4V20a.5.5 0 01-.5.5h-2.563c.041-.16.063-.327.063-.5V3a2 2 0 00-2-2H5a2 2 0 00-2 2v17zm2 .5a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h12a.5.5 0 01.5.5v17a.5.5 0 01-.5.5h-3v-2.25a.75.75 0 00-.75-.75h-4.5a.75.75 0 00-.75.75v2.25H5z\"></path></svg>", extraClasses), true
+		return fmt.Sprintf("<svg class=\"octicon octicon-organization%s\" height=\"24\" width=\"24\" viewbox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6.25 12a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM5.5 9.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zM6.25 5a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM9 12.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zm.75-4.25a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM9 5.75A.75.75 0 019.75 5h.5a.75.75 0 010 1.5h-.5A.75.75 0 019 5.75zM13.25 12a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zm-.75-2.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zM13.25 5a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5z\"></path><path fill-rule=\"evenodd\" d=\"M2 20a2 2 0 002 2h3.75a.75.75 0 00.75-.75V19h3v2.25c0 .414.336.75.75.75H16c.092 0 .183-.006.272-.018a.753.753 0 00.166.018H20a2 2 0 002-2v-8a2 2 0 00-.8-1.6l-.5-.375a.75.75 0 00-.9 1.2l.5.375a.5.5 0 01.2.4v8a.5.5 0 01-.5.5h-2.063c.041-.16.063-.327.063-.5V3a2 2 0 00-2-2H4a2 2 0 00-2 2v17zm2 .5a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h12a.5.5 0 01.5.5v17a.5.5 0 01-.5.5h-3v-2.25a.75.75 0 00-.75-.75h-4.5a.75.75 0 00-.75.75v2.25H4z\"></path></svg>", extraClasses), true
 	default:
 		return "", false
 	}

@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-var archiveLocation = "https://registry.npmjs.org/@primer/octicons/-/octicons-17.1.0.tgz"
+var archiveLocation = "https://registry.npmjs.org/@primer/octicons/-/octicons-17.2.0.tgz"
 
 func main() {
 	err := run()
